@@ -1,12 +1,12 @@
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useRef,useState,type ReactNode} from 'react';
 import {importModel} from './core/importModel';
 import {disposeObject} from './core/frame';
 import {CameraSession} from './core/camera';
 import {containRect} from './core/layout';
 import {createTracker,type FaceLandmarker} from './core/tracker';
 import {TryOnRenderer,type Calibration} from './core/renderer';
-export type TryOnProps={calibration:Calibration;mirror:boolean;onStatus:(s:string)=>void;active:boolean;onError:(s:string)=>void;assetBase?:string;modelFile?:File|null;onModelStatus?:(s:string)=>void};
-export function TryOn({calibration,mirror,onStatus,active,onError,assetBase=import.meta.env.BASE_URL.replace(/\/$/,''),modelFile=null,onModelStatus}:TryOnProps){
+export type TryOnProps={overlay?:ReactNode;calibration:Calibration;mirror:boolean;onStatus:(s:string)=>void;active:boolean;onError:(s:string)=>void;assetBase?:string;modelFile?:File|null;onModelStatus?:(s:string)=>void};
+export function TryOn({calibration,mirror,onStatus,active,onError,assetBase=import.meta.env.BASE_URL.replace(/\/$/,''),modelFile=null,onModelStatus,overlay}:TryOnProps){
  const host=useRef<HTMLDivElement>(null),video=useRef<HTMLVideoElement>(null),canvas=useRef<HTMLCanvasElement>(null),rendererRef=useRef<TryOnRenderer|null>(null);
  const settings=useRef(calibration);settings.current=calibration;
  const [source,setSource]=useState({width:16,height:10}),[viewport,setViewport]=useState({width:0,height:0}),[loading,setLoading]=useState(false);
@@ -45,5 +45,5 @@ export function TryOn({calibration,mirror,onStatus,active,onError,assetBase=impo
  return <div ref={host} className="viewport" style={{height:viewport.height||undefined}} data-source-width={source.width} data-source-height={source.height}>
  <div className="layers" style={{left:rect.x,top:rect.y,width:rect.width,height:rect.height,transform:mirror&&active?'scaleX(-1)':undefined}}><video ref={video} muted playsInline style={{visibility:active?'visible':'hidden'}}/><canvas ref={canvas} style={{visibility:active&&loading?'hidden':'visible'}}/></div>
  {active&&loading&&<span className="loading-label" role="status">Preparing camera &amp; face tracking…<br/>The frame appears after a face is detected.</span>}
- {!active&&<span className="preview-label">3D MODEL PREVIEW</span>}</div>;
+ {!active&&<span className="preview-label">3D MODEL PREVIEW</span>}{overlay}</div>;
 }

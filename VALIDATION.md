@@ -30,3 +30,10 @@
 - Chrome: 17/17 pass, including realistic 480x960 synthetic portrait stream, initial 0x0 dimensions followed by resize metadata, viewport rotation, delayed real tracker load, server failure and startup timeout. WebKit: all 3 new regressions pass, including actual self-hosted CPU model/WASM startup with a synthetic portrait stream. Real iPhone camera remains untested by the agent.
 - A synthetic portrait loading screenshot is saved in ignored test-results/portrait-loading.png. The user's private screenshot was not copied into the repository or published.
 - Previous documentation-only workflow remained stalled in browser dependency installation. CI now uses the standard Ubuntu runner's preinstalled Google Chrome (verified in official runner image manifest); browser download/apt installation is removed.
+
+## Mobile fit panel
+
+- Added a mobile-only, collapsible bottom overlay with adjustment selector, controlled size/horizontal/vertical slider and shared reset. Expanded panel stays below the center of the synthetic video in portrait and landscape fixtures; tracking rectangle is unchanged.
+- 22 Chrome tests pass, including 390x844 portrait, 844x390 landscape, 568x320 small landscape and 932x430 wide touch phone, plus desktop controls/layout regression. Five focused panel tests also pass in WebKit.
+- Panel tests cover expansion/collapse, slider state shared with the existing controls, reset, Escape/focus, Enter, >=44px touch targets, bounds/overflow, and unchanged video/overlay aspect ratio. All live camera input is synthetic and guarded before Start.
+- No dependencies added. Synthetic screenshots: ignored test-results/mobile-fit-*.png.
