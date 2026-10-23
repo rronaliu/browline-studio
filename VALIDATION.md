@@ -17,3 +17,8 @@
 - Camera hardware was never accessed. Import tests explicitly replace camera access with a throwing stub.
 - Credential-pattern scan of scoped staged source/docs/assets found only upstream MediaPipe logger API symbol names, no credentials. No unrelated project files, node_modules, generated screenshots, environment files or personal models staged.
 - Public repository and HTTPS-enforced Pages build_type=workflow verified via GitHub API before first push. Workflow uses standard Ubuntu runners and main-only deploy gate.
+
+- GitHub Actions checks and Pages deploy succeeded at run 39985346466 on `ubuntu-24.04`.
+- Live HTTPS returned HTTP/2 200. Headless Chrome live smoke passed camera-off preview, synthetic capture stream with real self-hosted MediaPipe model/WASM, import and original reset. Screenshot: test-results/live-production.png.
+- Reproducible verification scripts are in scripts/. They replace real camera access before navigation. Mac Chrome path is used by verify-live; verify-mobile uses Playwright WebKit (install its pinned browser first).
+- WebKit 26 (pinned Playwright browser) passed live iPhone 13 emulation: HTTPS preview, no mobile overflow, muted/inline playback flags, front-camera/audio-off constraints, mocked permission denial and recovery. Real iPhone hardware/camera remains untested. The WebKit test now replaces the whole navigator.mediaDevices object and asserts the mock identity before Start; the initial per-method hook did not reliably persist in WebKit and was corrected.
