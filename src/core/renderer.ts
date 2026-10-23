@@ -8,7 +8,7 @@ export class TryOnRenderer {
  constructor(canvas:HTMLCanvasElement){this.renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));this.camera.position.z=10000;this.scene.add(new T.HemisphereLight(0xffffff,0x665544,3));const light=new T.DirectionalLight(0xffffff,4);light.position.set(2,3,5);this.frame.add(this.model);this.scene.add(light,this.frame);}
  /** Transfers ownership of model geometry/materials to the renderer. */
  setModel(model:T.Group|null){this.frame.remove(this.model);disposeObject(this.model);this.model=model??createFrame();this.frame.add(this.model);}
- resize(w:number,h:number){this.width=w;this.height=h;this.renderer.setSize(w,h,false);this.camera.left=-w/2;this.camera.right=w/2;this.camera.top=h/2;this.camera.bottom=-h/2;this.camera.updateProjectionMatrix();}
+ resize(w:number,h:number){if(w<=0||h<=0)return;this.width=w;this.height=h;this.renderer.setSize(w,h,false);this.camera.left=-w/2;this.camera.right=w/2;this.camera.top=h/2;this.camera.bottom=-h/2;this.camera.updateProjectionMatrix();}
  render(result:FaceLandmarkerResult|null,c:Calibration,preview=false,time=0){const points=result?.faceLandmarks[0];this.frame.visible=preview||!!points;
  if(preview){this.frame.position.set(c.x*this.width,c.y*this.height,0);this.frame.scale.setScalar(this.width*.32/2.3*c.size);this.frame.rotation.set(.08,Math.sin(time/2200)*.35,0);}
  else if(points){const a=points[33],b=points[263];const distance=Math.hypot((a.x-b.x)*this.width,(a.y-b.y)*this.height);this.frame.scale.setScalar(distance/1.82*c.size);this.frame.position.set(((a.x+b.x)/2-.5+c.x)*this.width,(.5-(a.y+b.y)/2+c.y)*this.height,0);
